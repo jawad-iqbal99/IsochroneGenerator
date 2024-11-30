@@ -17,5 +17,5 @@ To install `IsochroneGenerator`, simply clone the repository and install the nec
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/IsochroneGenerator.git
+git clone https://github.com/jawad-iqbal99/IsochroneGenerator.git
 cd IsochroneGenerator
