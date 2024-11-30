@@ -1,0 +1,6 @@
+networkx
+osmnx
+shapely
+geopandas
+alphashape
+functools32
