@@ -1,6 +1,6 @@
 # IsochroneGenerator
 
-`IsochroneGenerator` is a Python class designed to generate isochrones (areas reachable within a certain time limit) based on road network data from OpenStreetMap. It leverages several Python libraries such as `osmnx`, `networkx`, `shapely`, `geopandas`, and `folium` to efficiently generate, visualize, and export isochrones.
+`IsochroneGenerator` is a Python class designed to generate isochrones (areas reachable within a certain time limit) based on road network data from OpenStreetMap. It leverages several Python libraries such as `osmnx`, `networkx`, `shapely`, and`geopandas` to efficiently generate, visualize, and export isochrones.
 
 ## Features
 
