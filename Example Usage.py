@@ -1,6 +1,6 @@
 '''
-
-1. Using an Existing Graph File
+Example 1
+Using an Existing Graph File
 If you already have a pre-generated road network graph in GraphML format, you can simply load the graph and generate isochrones from it.
 
 '''
@@ -17,7 +17,8 @@ isochrone = generator.generate_isochrone(lat, lon, max_drive_time=20, use_alphas
 generator.save_isochrone_to_geojson(lat, lon, max_drive_time=20, filename="my_isochrone.geojson")
 
 '''
-2. Fetching the Graph Based on Place Name
+Example 2
+Fetching the Graph Based on Place Name
 If you don't have a GraphML file and wish to fetch the road network dynamically based on a place name, you can do so with osmnx by providing the place name and network type.
 
 '''
