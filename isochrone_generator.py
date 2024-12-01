@@ -28,7 +28,7 @@ class IsochroneGenerator:
         elif place_name:
             self.G = self._load_graph_from_place(place_name)
         else:
-            raise ValueError("You must provide either a 'graph_path' or a 'place_name'.")
+            raise ValueError("You must provide either a 'graph_path' or a 'place_name (i.e Croydon, UK)'.")
 
         self.__update_graph_with_times()
 
@@ -92,6 +92,23 @@ class IsochroneGenerator:
         conversion = 1.60934 if "mph" in max_speed else 1
         speed = int(max_speed.split()[0]) * conversion
         return speed if speed else self.DEFAULT_SPEED
+        
+    def generate_city_boundary(self, city_name: str, filename: str) -> None:
+        """
+        Generate the boundary of a city by its name and save it as a GeoJSON file.
+
+        Parameters:
+        - city_name (str): The name of the city (e.g., 'Somerset, UK').
+        - filename (str): The filename for the GeoJSON output.
+        """
+        # Geocode the city name to get the boundary geometry
+        print(f"Fetching boundary for {city_name}...")
+        gdf = ox.geocode_to_gdf(city_name)
+
+        # Save the city boundary as a GeoJSON file
+        gdf.to_file(filename, driver="GeoJSON")
+        print(f"City boundary for {city_name} saved to {filename}")
+
     
     @functools.lru_cache(maxsize=128)
     def generate_isochrone(self, lat: float, lon: float, max_drive_time: float, use_alphashape: bool = False) -> Union[Polygon, List[Polygon]]:
