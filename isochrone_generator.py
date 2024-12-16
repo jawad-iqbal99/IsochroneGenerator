@@ -89,8 +89,16 @@ class IsochroneGenerator:
         Returns:
         - float: Speed in kilometers per hour.
         """
+        if max_speed.lower() == 'none' or not max_speed.strip():
+            return self.DEFAULT_SPEED
+
         conversion = 1.60934 if "mph" in max_speed else 1
-        speed = int(max_speed.split()[0]) * conversion
+        try:
+            speed = int(max_speed.split()[0]) * conversion
+        except ValueError:
+            # In case the conversion fails (e.g., invalid speed format), return the default speed
+            speed = self.DEFAULT_SPEED
+        
         return speed if speed else self.DEFAULT_SPEED
         
     def generate_city_boundary(self, city_name: str, filename: str) -> None:
@@ -108,7 +116,7 @@ class IsochroneGenerator:
         # Save the city boundary as a GeoJSON file
         gdf.to_file(filename, driver="GeoJSON")
         print(f"City boundary for {city_name} saved to {filename}")
-
+        return gdf
     
     @functools.lru_cache(maxsize=128)
     def generate_isochrone(self, lat: float, lon: float, max_drive_time: float, use_alphashape: bool = False) -> Union[Polygon, List[Polygon]]:
@@ -140,26 +148,3 @@ class IsochroneGenerator:
             polys = alphashape(points, alpha=10) if alphashape(points, alpha=10).geom_type != 'MultiPolygon' else alphashape(points, alpha=20)
             
         return polys
-
-    def save_isochrone_to_geojson(self, lat: float, lon: float, max_drive_time: float, filename: str, use_alphashape: bool = False) -> None:
-        """
-        Generate an isochrone and save it as a GeoJSON file.
-
-        Parameters:
-        - lat (float): Latitude of the center point.
-        - lon (float): Longitude of the center point.
-        - max_drive_time (float): Maximum travel time in minutes.
-        - filename (str): The filename for the GeoJSON output.
-        - use_alphashape (bool): Whether to use alphashape for concave hulls.
-        """
-        isochrone = self.generate_isochrone(lat, lon, max_drive_time, use_alphashape)
-    
-        # Create the GeoSeries
-        isochrone_gdf = gpd.GeoSeries([isochrone])
-    
-        # Set the CRS explicitly if not already set
-        if isochrone_gdf.crs is None:
-            isochrone_gdf.set_crs("EPSG:4326", allow_override=True, inplace=True)
-    
-        # Export the isochrone as GeoJSON
-        isochrone_gdf.to_file(filename, driver="GeoJSON")
