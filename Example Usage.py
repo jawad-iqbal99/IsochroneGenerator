@@ -1,35 +1,32 @@
-'''
-Example 1
-Using an Existing Graph File
-If you already have a pre-generated road network graph in GraphML format, you can simply load the graph and generate isochrones from it.
+# Import necessary libraries
+import osmnx as ox
+import networkx as nx
+import geopandas as gpd
+import json
+from shapely.geometry import Polygon
+import dash_leaflet as dl
 
-'''
 from isochrone_generator import IsochroneGenerator
 
-# Instantiate the IsochroneGenerator with a GraphML file
-generator = IsochroneGenerator(graph_path="path_to_existing_graph.graphml")
+# 1. Initialize IsochroneGenerator
+isochrone_gen = IsochroneGenerator()
 
-# Generate an isochrone for a specific point (latitude, longitude) with a time limit
-lat, lon = 51.5074, -0.1278  # Example coordinates for London
-isochrone = generator.generate_isochrone(lat, lon, max_drive_time=20, use_alphashape=False)
+# 2. Load the graph from OpenStreetMap (OSM)
+graph = isochrone_gen._load_graph_from_place("Somerset, UK")
 
-# Save the generated isochrone to a GeoJSON file
-generator.save_isochrone_to_geojson(lat, lon, max_drive_time=20, filename="my_isochrone.geojson")
+# 3. Generate an isochrone from a specific latitude, longitude, and max drive time (in minutes)
+# For example, latitude and longitude of a point in Somerset (approximately 51.2094° N, 3.1016° W)
+lat, lon = 51.2094, -3.1016  # Latitude and longitude for Somerset, UK
+max_drive_time = 10  # Max drive time in minutes (e.g., generate isochrone for a 30-minute drive)
 
-'''
-Example 2
-Fetching the Graph Based on Place Name
-If you don't have a GraphML file and wish to fetch the road network dynamically based on a place name, you can do so with osmnx by providing the place name and network type.
+# Generate isochrone (a polygon that shows the area accessible within the max drive time)
+isochrone = isochrone_gen.generate_isochrone(lat, lon, max_drive_time)
 
-'''
-from isochrone_generator import IsochroneGenerator
+# Convert the road network (graph) to GeoJSON
+# If you'd like to visualize the entire road network as GeoJSON
+network_geojson = isochrone_gen.graph_to_geojson()
 
-# Instantiate the IsochroneGenerator by providing a place name and network type
-generator = IsochroneGenerator(place_name="Swindon, UK", network_type="drive")
 
-# Generate an isochrone with a 20-minute drive time from a given point
-lat, lon = 51.5550, -1.7810  # Example coordinates for Swindon, UK
-isochrone = generator.generate_isochrone(lat, lon, max_drive_time=20, use_alphashape=True)
-
-# Save the generated isochrone to a GeoJSON file
-generator.save_isochrone_to_geojson(lat, lon, max_drive_time=20, filename="swindon_drive_isochrone.geojson")
+# Generate shortest paths from the center node to boundary nodes (optional)
+# This will create paths from the center point (Somerset) to the boundary of the isochrone
+geojson_paths = isochrone_gen.generate_shortest_paths()
