@@ -1,4 +1,4 @@
-# Isochrone Generator for Road Network Analysis
+# Isochrone Generator
 This repository contains an implementation of the Isochrone Generator class, which allows users to generate isochrones and shortest paths on road networks. The tool is built using NetworkX, OSMnx, Geopandas, and Dash-Leaflet for geospatial analysis and visualization.
 
 ## Features:
