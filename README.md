@@ -21,6 +21,6 @@ Generates a city boundary and saves it as a GeoJSON file (currently not implemen
 # Libraries and Technologies:
 ### NetworkX: Used for graph-based network analysis.
 ### OSMnx: Used for loading OpenStreetMap data and working with urban road networks.
-###Geopandas: For spatial data handling and conversion to GeoJSON format.
+### Geopandas: For spatial data handling and conversion to GeoJSON format.
 ### Dash-Leaflet: For visualizing geographic data in web applications.
 ### Alphashape: For generating concave hulls (isochrones) around the reachable nodes.
